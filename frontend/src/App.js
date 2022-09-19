@@ -21,8 +21,8 @@ const Footer = () => {
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [newName, setNewName] = useState(null)
+  const [newNumber, setNewNumber] = useState(null)
   const [filter, setFilter] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -63,6 +63,7 @@ const App = () => {
           }
         } else {
           contactService.create(personObject).then(data => {
+            console.log('testing:', data)
             setErrorMessage(
               `Added ${newName}`
             )
@@ -70,8 +71,17 @@ const App = () => {
               setErrorMessage(null)
             }, 5000)
             setPersons(persons.concat(data))
-            setNewName('')
-            setNewNumber('')
+            setNewName(null)
+            setNewNumber(null)
+          })
+          .catch(error => {
+            console.log("error data", error.response.data)
+            setErrorMessage(
+              `Added ${error.response.data.error}`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
           
         }
